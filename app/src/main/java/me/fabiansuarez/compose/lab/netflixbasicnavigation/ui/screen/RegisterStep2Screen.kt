@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
@@ -27,13 +28,12 @@ import me.fabiansuarez.compose.lab.netflixbasicnavigation.data.models.NetflixPla
 import me.fabiansuarez.compose.lab.netflixbasicnavigation.data.netflixPlans
 import me.fabiansuarez.compose.lab.netflixbasicnavigation.ui.theme.*
 
-@Preview(
-    name = "Netflix Register Step 2 - Elige tu plan",
-    showBackground = true,
-    showSystemUi = true
-)
+
 @Composable
-fun RegisterStep2Screen() {
+fun RegisterStep2Screen(
+    onClickBack: () -> Unit = {},
+    onNextStep: () -> Unit = {}
+) {
     val scrollState = rememberScrollState()
     var selectedPlan by remember { mutableStateOf(3) } // Premium selected by default
 
@@ -48,9 +48,9 @@ fun RegisterStep2Screen() {
                 .verticalScroll(scrollState)
         ) {
 
-            // ── Top Bar ──────────────────────────────────────────────────────
+            // ── Top Bar
             RegisterTopBar(
-                onBackClick = {},
+                onBackClick = { onClickBack() },
                 step = 2,
                 totalSteps = 3
             )
@@ -102,13 +102,11 @@ fun RegisterStep2Screen() {
                     Spacer(modifier = Modifier.height(12.dp))
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Spacer(modifier = Modifier.height(28.dp))
 
-                // ── Continue button ──────────────────────────────────────────
+                // ── Continue button -> CAMBIO 2: Avance a Paso 3 ──────────────
                 Button(
-                    onClick = { },
+                    onClick = { onNextStep() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
@@ -292,32 +290,40 @@ fun RegisterTopBar(
     step: Int,
     totalSteps: Int
 ) {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 14.dp)
+            .statusBarsPadding()
     ) {
-        IconButton(
-            onClick = onBackClick,
-            modifier = Modifier.align(Alignment.CenterStart)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Volver",
-                tint = NetflixWhite,
-                modifier = Modifier.size(24.dp)
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .zIndex(1f)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Volver",
+                    tint = NetflixWhite,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            Text(
+                text = "NETFLIX",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Black,
+                color = NetflixRed,
+                letterSpacing = 2.sp,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
 
-        Text(
-            text = "NETFLIX",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Black,
-            color = NetflixRed,
-            letterSpacing = 2.sp,
-            modifier = Modifier.align(Alignment.Center)
-        )
+        NetflixStepProgress(totalSteps = totalSteps, currentStep = step)
     }
-
-    NetflixStepProgress(totalSteps = totalSteps, currentStep = step)
 }

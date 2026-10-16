@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -28,12 +27,12 @@ import me.fabiansuarez.compose.lab.netflixbasicnavigation.ui.theme.*
 
 
 // ─── RegisterStep3Screen - Configurar pago ────────────────────────────────────
-@Preview(
-    name = "Register Step 3 - PSE",
-    showBackground = true,
-)
+
 @Composable
-fun RegisterStep3Screen() {
+fun RegisterStep3Screen(
+    onClickBack: () -> Unit = {},
+    onFinishRegister: () -> Unit = {}
+) {
     val scrollState = rememberScrollState()
     var selectedPayment by remember { mutableStateOf(PaymentMethod.CARD) }
 
@@ -57,7 +56,7 @@ fun RegisterStep3Screen() {
 
             // ── Top Bar ──────────────────────────────────────────────────────
             RegisterTopBar(
-                onBackClick = { },
+                onBackClick = {onClickBack() },
                 step = 3,
                 totalSteps = 3
             )
@@ -157,7 +156,7 @@ fun RegisterStep3Screen() {
 
                 // ── Start membership button ──────────────────────────────────
                 Button(
-                    onClick = {},
+                    onClick = {onFinishRegister()},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(54.dp),

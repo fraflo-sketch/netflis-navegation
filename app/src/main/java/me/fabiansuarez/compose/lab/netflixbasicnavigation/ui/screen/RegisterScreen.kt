@@ -23,17 +23,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import me.fabiansuarez.compose.lab.netflixbasicnavigation.ui.theme.*
 
 // ─── RegisterScreen ───────────────────────────────────────────────────────────
-@Preview(
-    name = "Netflix Register Screen",
-    showBackground = true,
-    showSystemUi = true
-)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(
+    onClickBack: () -> Unit = {},
+    onNextStep: () -> Unit = {},
+    onClickLogin: () -> Unit = {}
+
+) {
     val scrollState = rememberScrollState()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -60,12 +62,13 @@ fun RegisterScreen() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .statusBarsPadding()
                     .padding(horizontal = 16.dp, vertical = 14.dp)
             ) {
                 // Back arrow
                 IconButton(
-                    onClick = {},
-                    modifier = Modifier.align(Alignment.CenterStart)
+                    onClick = {onClickBack()},
+                    modifier = Modifier.align(Alignment.CenterStart).zIndex(1f)
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
@@ -202,7 +205,7 @@ fun RegisterScreen() {
 
                 // ── Continue button ──────────────────────────────────────────
                 Button(
-                    onClick = { },
+                    onClick = { onNextStep()},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
@@ -236,7 +239,7 @@ fun RegisterScreen() {
                         color = NetflixWhite,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        modifier = Modifier.clickable { }
+                        modifier = Modifier.clickable {onClickLogin() }
                     )
                 }
 
